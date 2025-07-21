@@ -7,6 +7,7 @@ from pathlib import Path
 import threading
 import queue
 
+
 def check_and_install_dependencies():
     required_packages = {
         'docx': 'python-docx',
@@ -43,6 +44,7 @@ def check_and_install_dependencies():
     else:
         print(">>> All libraries are present.")
 
+
 try:
     check_and_install_dependencies()
     import docx
@@ -54,10 +56,12 @@ except Exception as e:
     messagebox.showerror("Error", f"An error occurred during library setup: {e}")
     LIBS_LOADED = False
 
+
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 except Exception:
     pass
+
 
 LANGUAGES = {
     'vi': {
@@ -118,11 +122,13 @@ LANGUAGES = {
     }
 }
 
+
 def extract_text_from_docx(file_path):
     try:
         doc = docx.Document(file_path)
         return "\n".join([para.text for para in doc.paragraphs])
     except Exception: return ""
+
 
 def extract_text_from_pdf(file_path):
     try:
@@ -130,10 +136,12 @@ def extract_text_from_pdf(file_path):
             return "\n".join([page.get_text() for page in doc])
     except Exception: return ""
 
+
 def extract_text_from_image(file_path):
     try:
         return pytesseract.image_to_string(Image.open(file_path))
     except Exception: return ""
+
 
 class AdvancedSearchApp:
     def __init__(self, root):
@@ -141,11 +149,13 @@ class AdvancedSearchApp:
         self.root.geometry("750x600")
         self.root.minsize(600, 500)
 
+
         self.source_folder = tk.StringVar()
         self.search_phrase = tk.StringVar()
         self.file_types = {".png": tk.BooleanVar(value=True), ".jpg": tk.BooleanVar(value=True), ".jpeg": tk.BooleanVar(value=True), ".pdf": tk.BooleanVar(value=True), ".docx": tk.BooleanVar(value=True), ".txt": tk.BooleanVar(value=True)}
         self.is_searching = False
         self.current_lang = tk.StringVar(value='vi')
+
 
         top_frame = tk.Frame(root)
         top_frame.pack(fill=tk.X, padx=10, pady=(10,0))
@@ -155,6 +165,7 @@ class AdvancedSearchApp:
         main_frame = tk.Frame(root, padx=15, pady=15)
         main_frame.pack(fill=tk.BOTH, expand=True)
 
+
         self.folder_frame = tk.LabelFrame(main_frame, text="", padx=10, pady=10, font=('Helvetica', 10, 'bold'))
         self.folder_frame.pack(fill=tk.X, expand=True)
         self.dir_entry = tk.Entry(self.folder_frame, textvariable=self.source_folder, font=('Helvetica', 10))
@@ -162,10 +173,12 @@ class AdvancedSearchApp:
         self.browse_btn = tk.Button(self.folder_frame, text="", command=self.browse_folder)
         self.browse_btn.pack(side=tk.LEFT, padx=(10, 0))
 
+
         self.phrase_frame = tk.LabelFrame(main_frame, text="", padx=10, pady=10, font=('Helvetica', 10, 'bold'))
         self.phrase_frame.pack(fill=tk.X, expand=True, pady=10)
         self.phrase_entry = tk.Entry(self.phrase_frame, textvariable=self.search_phrase, font=('Helvetica', 10))
         self.phrase_entry.pack(fill=tk.X, expand=True, ipady=4)
+
 
         self.ext_frame = tk.LabelFrame(main_frame, text="", padx=10, pady=10, font=('Helvetica', 10, 'bold'))
         self.ext_frame.pack(fill=tk.X, expand=True)
@@ -183,6 +196,7 @@ class AdvancedSearchApp:
         self.reset_button = tk.Button(action_frame, text="", command=self.reset, font=('Helvetica', 11, 'bold'), bg="#c0392b", fg="white")
         self.reset_button.pack(side=tk.LEFT, padx=(10, 0), ipady=5, ipadx=10)
 
+
         self.results_frame = tk.LabelFrame(main_frame, text="", padx=10, pady=10, font=('Helvetica', 10, 'bold'))
         self.results_frame.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
         self.results_text = scrolledtext.ScrolledText(self.results_frame, wrap=tk.WORD, state='disabled', font=('Courier New', 9))
@@ -194,6 +208,7 @@ class AdvancedSearchApp:
             texts = LANGUAGES[self.current_lang.get()]
             self.log(f"{texts['libs_warning_title']} {texts['libs_warning_msg1']}")
             self.log(f"-> {texts['libs_warning_msg2']}")
+
 
     def update_ui_text(self):
         lang_code = self.current_lang.get()
@@ -213,15 +228,19 @@ class AdvancedSearchApp:
         self.current_lang.set(new_lang)
         self.update_ui_text()
 
+
     def log(self, message):
         self.results_text.config(state='normal'); self.results_text.insert(tk.END, message + "\n"); self.results_text.config(state='disabled'); self.results_text.see(tk.END)
+
 
     def browse_folder(self):
         folder_selected = filedialog.askdirectory(title="Select folder")
         if folder_selected: self.source_folder.set(folder_selected)
 
+
     def get_selected_extensions(self):
         return [ext for ext, var in self.file_types.items() if var.get()]
+
 
     def start_search(self):
         lang_code = self.current_lang.get()
@@ -233,6 +252,7 @@ class AdvancedSearchApp:
         if not folder_path.is_dir(): messagebox.showerror(texts['error_title'], texts['invalid_path_error']); return
         if not phrase: messagebox.showerror(texts['error_title'], texts['missing_phrase_error']); return
         if not selected_exts: messagebox.showwarning(texts['warning_title'], texts['missing_ext_error']); return
+
 
         self.run_button.config(state='disabled')
         self.reset_button.config(state='disabled')
@@ -246,8 +266,10 @@ class AdvancedSearchApp:
         
         self.check_queue()
 
+
     def check_queue(self):
         if not self.is_searching: return
+
 
         try:
             message = self.results_queue.get_nowait()
@@ -265,6 +287,7 @@ class AdvancedSearchApp:
                 self.root.after(100, self.check_queue)
         except queue.Empty:
             self.root.after(100, self.check_queue)
+
 
     def search_worker(self, folder_path, phrase, selected_exts, q, lang_code):
         texts = LANGUAGES[lang_code]
@@ -300,6 +323,7 @@ class AdvancedSearchApp:
         
         q.put(('FINAL_COUNT', found_count))
 
+
     def reset(self):
         self.is_searching = False 
         self.source_folder.set(""); self.search_phrase.set("")
@@ -308,21 +332,22 @@ class AdvancedSearchApp:
         self.run_button.config(state='normal')
         self.reset_button.config(state='normal')
 
+
 if __name__ == '__main__':
     if LIBS_LOADED is not False:
+        # Thêm code để ẩn cửa sổ cmd (console) trên Windows ngay sau khi chạy
+        if sys.platform == "win32":
+            try:
+                kernel32 = ctypes.WinDLL('kernel32')
+                user32 = ctypes.WinDLL('user32')
+                hWnd = kernel32.GetConsoleWindow()
+                if hWnd:
+                    user32.ShowWindow(hWnd, 0)  # 0 = SW_HIDE (ẩn console)
+            except Exception as e:
+                print(f"Failed to hide console: {e}")  # Log lỗi nếu có
+
         root = tk.Tk()
         app = AdvancedSearchApp(root)
         root.mainloop()
     else:
         print("Could not start the application due to missing critical libraries.")
-
-def main():
-    """Hàm chính để khởi chạy ứng dụng."""
-    # Đoạn này trước đây nằm trong if __name__ == '__main__':
-    root = tk.Tk()
-    app = AdvancedSearchApp(root)
-    root.mainloop()
-
-if __name__ == '__main__':
-    # Gọi hàm main để chạy ứng dụng khi thực thi trực tiếp
-    main()

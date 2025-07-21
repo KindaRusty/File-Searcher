@@ -12,7 +12,7 @@ A powerful desktop application built with Python and Tkinter that allows you to 
 
 ### **Screenshot**
 
-<img src="demo image\en_version.png" alt="Application Screenshot" width="600"/>
+<img src="Demo\en_version.png" alt="Application Screenshot" width="600"/>
 
 ### **Features**
 
@@ -88,7 +88,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ### **Ảnh chụp màn hình**
 
-<img src="demo image\vi_version.png" alt="Ảnh chụp màn hình ứng dụng" width="600"/>
+<img src="Demo\vi_version.png" alt="Ảnh chụp màn hình ứng dụng" width="600"/>
 
 ### **Tính năng**
 
