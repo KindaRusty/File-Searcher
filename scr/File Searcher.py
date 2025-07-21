@@ -315,3 +315,14 @@ if __name__ == '__main__':
         root.mainloop()
     else:
         print("Could not start the application due to missing critical libraries.")
+
+def main():
+    """Hàm chính để khởi chạy ứng dụng."""
+    # Đoạn này trước đây nằm trong if __name__ == '__main__':
+    root = tk.Tk()
+    app = AdvancedSearchApp(root)
+    root.mainloop()
+
+if __name__ == '__main__':
+    # Gọi hàm main để chạy ứng dụng khi thực thi trực tiếp
+    main()

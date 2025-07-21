@@ -1,0 +1,40 @@
+# File: pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "advanced-file-searcher"
+version = "1.0.0"
+authors = [
+  # Thay đổi thông tin của bạn ở đây
+  { name="Tên của bạn", email="your.email@example.com" },
+]
+description = "A powerful, bilingual desktop application for searching text within documents and images."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT License" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Desktop Environment",
+    "Topic :: Utilities",
+    "Environment :: Win32 (MS Windows)",
+]
+
+# Liệt kê các thư viện mà dự án của bạn cần để chạy
+dependencies = [
+    "python-docx",
+    "PyMuPDF",
+    "pytesseract",
+    "Pillow",
+]
+
+[project.gui-scripts]
+# Dòng này quan trọng: Nó tạo ra một lệnh để khởi chạy ứng dụng GUI.
+# Thay 'file_searcher.main:main' bằng tên đúng.
+# Ví dụ: nếu file chính của bạn là app.py và hàm khởi tạo là main(), thì dùng "app:main"
+# Cần phải đặt file Python của bạn vào trong một thư mục package (xem Bước 2)
+file-searcher = "file_searcher.main:main"
