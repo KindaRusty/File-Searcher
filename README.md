@@ -12,9 +12,7 @@ A powerful desktop application built with Python and Tkinter that allows you to 
 
 ### **Screenshot**
 
-_(Please add your application screenshot here. Save it as `screenshot.png` in the project folder.)_
-
-<img src="screenshot.png" alt="Application Screenshot" width="600"/>
+<img src="demo image\en_version.png" alt="Application Screenshot" width="600"/>
 
 ### **Features**
 
@@ -90,8 +88,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ### **Ảnh chụp màn hình**
 
-_(Vui lòng thêm ảnh chụp màn hình ứng dụng của bạn tại đây. Lưu ảnh với tên `screenshot.png` trong thư mục dự án.)_
-<img src="screenshot.png" alt="Ảnh chụp màn hình ứng dụng" width="600"/>
+<img src="demo image\vi_version.png" alt="Ảnh chụp màn hình ứng dụng" width="600"/>
 
 ### **Tính năng**
 
